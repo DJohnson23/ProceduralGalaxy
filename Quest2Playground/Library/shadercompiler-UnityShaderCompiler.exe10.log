@@ -1,0 +1,5 @@
+Base path: 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data/PlaybackEngines'
+Cmd: initializeCompiler
+Cmd: compileComputeKernel
+  error: 1 plat 9 at MarchingCubesShader.compute(414): 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+  api=9 insize=23402 outsize=306419 ok=1

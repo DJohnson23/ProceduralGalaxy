@@ -1,0 +1,9 @@
+Base path: 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data/PlaybackEngines'
+Cmd: initializeCompiler
+Cmd: compileComputeKernel
+  error: 1 plat 9 at MarchingCubesShader.compute(63): signed/unsigned mismatch, unsigned assumed
+  error: 1 plat 9 at MarchingCubesShader.compute(415): 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+  api=9 insize=23111 outsize=306212 ok=1
+Cmd: compileComputeKernel
+  error: 1 plat 9 at MarchingCubesShader.compute(414): 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+  api=9 insize=23423 outsize=306409 ok=1

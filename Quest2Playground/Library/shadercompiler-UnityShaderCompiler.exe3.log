@@ -1,0 +1,6 @@
+Base path: 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data/PlaybackEngines'
+Cmd: initializeCompiler
+Cmd: compileComputeKernel
+  error: 2 plat 4 at ../Includes/FractalNoise.cginc(8): syntax error: unexpected token '+='
+  error: 2 plat 4 at ../Includes/FractalNoise.cginc(48): undeclared identifier 'persistence'
+  api=4 insize=1017 outsize=0 ok=0

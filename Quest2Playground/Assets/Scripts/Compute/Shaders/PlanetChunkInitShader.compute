@@ -1,0 +1,54 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+#include "../Includes/FractalNoise.cginc"
+
+struct GridPoint
+{
+    float3 position;
+    float val;
+};
+
+RWStructuredBuffer<GridPoint> gridPoints;
+
+uint pointsPerRow;
+float size;
+float coreRadius;
+float3 chunkPosition;
+float3 localPlanetCenter;
+
+int to1D(int x, int y, int z) {
+    return (z * pointsPerRow * pointsPerRow) + (y * pointsPerRow) + x;
+}
+
+float CalcPointValue(float3 position) {
+    float dist = distance(localPlanetCenter, position);
+
+    if (dist <= coreRadius) {
+        return 1;
+    }
+
+    return 0;
+}
+
+[numthreads(3,3,3)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= pointsPerRow || id.y >= pointsPerRow || id.z >= pointsPerRow) {
+        return;
+    }
+
+    float step = size / (pointsPerRow - 1);
+
+    int index = to1D(id.x, id.y, id.z);
+
+    float3 position = float3(id.x * step, id.y * step, id.z * step);
+    float val = CalcPointValue(position);
+
+    GridPoint newPoint;
+
+    newPoint.position = position;
+    newPoint.val = val;
+
+    gridPoints[index] = newPoint;
+}
