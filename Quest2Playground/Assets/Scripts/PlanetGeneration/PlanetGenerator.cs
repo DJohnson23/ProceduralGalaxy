@@ -1,9 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.Threading;
-using System.Collections.Generic;
 
 public class PlanetGenerator : MonoBehaviour
 {
@@ -11,11 +8,13 @@ public class PlanetGenerator : MonoBehaviour
     public int depth = 5;
     public float size = 100;
     public Transform viewer;
-    public SimplexNoiseSettings noiseSettings;
+    public NoiseSettings noiseSettings;
     public float coreRadius = 70f;
     public float surfaceHeight = 15f;
     public int chunkResolution = 5;
-    public ComputeShader marchingCubeComputeShader;
+    public ComputeShader marchingCubesShader;
+    public ComputeShader planetChunkInitShader;
+
     public Material planetMaterial;
     public float mass = 10f;
     public int largeViewResolution = 5;
@@ -151,6 +150,13 @@ public class PlanetGenerator : MonoBehaviour
                         
                     Octree<PlanetChunk> chunkTree = planetChunkTree.LookupTree(viewedChunkPos);
 
+                    float distance = Vector3.Distance(chunkTree.Position, viewer.position);
+
+                    if(distance > maxViewDst)
+                    {
+                        continue;
+                    }
+
                     if(chunkTree.value != null)
                     {
                         //chunkTree.value.gameObject.SetActive(true);
@@ -164,7 +170,7 @@ public class PlanetGenerator : MonoBehaviour
                         chunkTree.value = newChunk;
                     }
 
-                    float distance = Vector3.Distance(chunkTree.Position, viewer.position);
+
                     chunkTree.value.LOD = GetLOD(distance);
                     lastVisibleChunks.Add(chunkTree.value);
                 }
@@ -187,7 +193,8 @@ public class PlanetGenerator : MonoBehaviour
         newPlanetChunk.coreRadius = coreRadius;
         newPlanetChunk.surfaceHeight = surfaceHeight;
         newPlanetChunk.resolution = resolution;
-        newPlanetChunk.marchingCubeShader = marchingCubeComputeShader;
+        newPlanetChunk.marchingCubeShader = marchingCubesShader;
+        newPlanetChunk.planetChunkInitShader = planetChunkInitShader;
 
         return newPlanetChunk;
     }
@@ -214,5 +221,8 @@ public class PlanetGenerator : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, coreRadius + surfaceHeight);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(viewer.position, maxViewDst);
     }
 }

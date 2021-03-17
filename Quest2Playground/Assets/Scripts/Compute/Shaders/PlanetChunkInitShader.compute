@@ -14,8 +14,15 @@ RWStructuredBuffer<GridPoint> gridPoints;
 uint pointsPerRow;
 float size;
 float coreRadius;
+float surfaceHeight;
 float3 chunkPosition;
 float3 localPlanetCenter;
+
+float scale;
+float multiplier;
+int numLayers;
+float lacunarity;
+float persistence;
 
 int to1D(int x, int y, int z) {
     return (z * pointsPerRow * pointsPerRow) + (y * pointsPerRow) + x;
@@ -26,6 +33,14 @@ float CalcPointValue(float3 position) {
 
     if (dist <= coreRadius) {
         return 1;
+    }
+
+    float surfaceRadius = coreRadius + surfaceHeight;
+    float samplePosition = normalize(position) * coreRadius + localPlanetCenter;
+
+    if (dist <= surfaceRadius) {
+        return 0;
+        //return simpleNoise(samplePosition, numLayers, scale, persistence, lacunarity, multiplier) * (1 - (dist / surfaceRadius));
     }
 
     return 0;
@@ -42,7 +57,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
     int index = to1D(id.x, id.y, id.z);
 
-    float3 position = float3(id.x * step, id.y * step, id.z * step);
+    float halfSize = size / 2;
+    float3 position = float3(id.x * step - halfSize, id.y * step - halfSize, id.z * step - halfSize);
     float val = CalcPointValue(position);
 
     GridPoint newPoint;

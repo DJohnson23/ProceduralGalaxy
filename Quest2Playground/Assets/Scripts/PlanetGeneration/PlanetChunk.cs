@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading;
+using UnityEngine.Rendering;
 
 public struct Triangle
 {
@@ -16,6 +16,7 @@ public struct GridPoint
     public float val;
 }
 
+[ExecuteInEditMode]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshCollider))]
@@ -29,7 +30,7 @@ public class PlanetChunk : MonoBehaviour
     public ComputeShader marchingCubeShader;
     public ComputeShader planetChunkInitShader;
     [SerializeField]
-    public SimplexNoiseSettings noiseSettings;
+    public NoiseSettings noiseSettings;
 
     public Vector3 center = new Vector3(0, 0, 0);
     public float surfaceHeight = 15f;
@@ -47,7 +48,10 @@ public class PlanetChunk : MonoBehaviour
             if(lod != value)
             {
                 lod = value;
-                refreshMesh = true;
+                if(initialized)
+                {
+                    GenerateMesh();
+                }
             }
         }
     }
@@ -57,32 +61,23 @@ public class PlanetChunk : MonoBehaviour
 
     MeshFilter meshFilter;
     MeshCollider meshCollider;
-    SimplexNoiseGenerator noiseGenerator;
 
     ComputeBuffer triangleBuffer;
     ComputeBuffer gridPointBuffer;
     ComputeBuffer argBuffer;
+    ComputeBuffer initGridPointBuffer;
 
     int pointsPerRow;
     int numCells;
 
-    bool refreshMesh = false;
     bool initialized = false;
     Vector3 worldPosition;
+
+    float timeStart;
 
     private void Start()
     {
         InitChunk();
-    }
-
-    private void Update()
-    {
-
-        if (refreshMesh)
-        {
-            GenerateMesh();
-            refreshMesh = false;
-        }
     }
 
     public void SetVisible(bool visible)
@@ -95,50 +90,64 @@ public class PlanetChunk : MonoBehaviour
         worldPosition = transform.position;
         meshFilter = GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
-
-        ThreadStart threadStart = delegate
-        {
-            InitPoints();
-        };
-
-        new Thread(threadStart).Start();
+        InitPoints();
     }
 
     private void InitPoints()
     {
-        noiseGenerator = new SimplexNoiseGenerator(noiseSettings.seed);
-
+        timeStart = Time.time;
         pointsPerRow = (int)Mathf.Pow(2, resolution) + 1;
         numCells = (int)Mathf.Pow(8, resolution);
 
         gridPoints = new GridPoint[pointsPerRow * pointsPerRow * pointsPerRow];
 
-        float step = size / (pointsPerRow - 1);
-        float halfSize = size / 2;
-
-        for (int x = 0; x < pointsPerRow; x++)
+        if(initGridPointBuffer != null)
         {
-            for (int y = 0; y < pointsPerRow; y++)
-            {
-                for (int z = 0; z < pointsPerRow; z++)
-                {
-                    int index = to1D(x, y, z);
-                    Vector3 position = new Vector3(x * step - halfSize, y * step - halfSize, z * step - halfSize);
-                    float val = CalcPointValue(position);
-                    gridPoints[index] = new GridPoint();
-                    gridPoints[index].position = position;
-                    gridPoints[index].val = val;
-                }
-            }
+            initGridPointBuffer.Release();
         }
 
+        initGridPointBuffer = new ComputeBuffer(gridPoints.Length, sizeof(float) * 4);
+        initGridPointBuffer.SetData(gridPoints);
+
+
+        planetChunkInitShader.SetBuffer(0, "gridPoints", initGridPointBuffer);
+        planetChunkInitShader.SetInt("pointsPerRow", pointsPerRow);
+        planetChunkInitShader.SetFloat("size", size);
+        planetChunkInitShader.SetFloat("coreRadius", coreRadius);
+        planetChunkInitShader.SetFloat("surfaceHeight", surfaceHeight);
+        planetChunkInitShader.SetVector("chunkPosition", transform.position);
+        planetChunkInitShader.SetVector("localPlanetCenter", transform.InverseTransformPoint(center));
+
+        planetChunkInitShader.SetFloat("scale", noiseSettings.scale);
+        planetChunkInitShader.SetFloat("multiplier", noiseSettings.multiplier);
+        planetChunkInitShader.SetInt("numLayers", noiseSettings.numLayers);
+        planetChunkInitShader.SetFloat("lacunarity", noiseSettings.lacunarity);
+        planetChunkInitShader.SetFloat("persistence", noiseSettings.persistence);
+
+        int numGroups = Mathf.CeilToInt(pointsPerRow / 3.0f);
+        planetChunkInitShader.Dispatch(0, numGroups, numGroups, numGroups);
+
+        AsyncGPUReadback.Request(initGridPointBuffer, ReceiveInitData);
+    }
+
+    private void ReceiveInitData(AsyncGPUReadbackRequest request)
+    {
+        float initTime = Time.time - timeStart;
+        Debug.Log("Init: " + initTime);
+        gridPoints = request.GetData<GridPoint>(0).ToArray();
+        //initGridPointBuffer.GetData(gridPoints);
+        initGridPointBuffer.Release();
         initialized = true;
-        refreshMesh = true;
+
+        float genStart = Time.time;
+        GenerateMesh();
+        float genTime = Time.time - genStart;
+
+        Debug.Log("Generate Mesh: " + genTime);
     }
 
     private void GenerateMesh()
     {
-        
         if(!initialized)
         {
             Debug.LogError("Planet Chunk not initialized - Can not Generate Mesh");
@@ -303,7 +312,7 @@ public class PlanetChunk : MonoBehaviour
             return;
         }
 
-        Gizmos.DrawWireCube(transform.TransformPoint(Vector3.one * size / 2), Vector3.one * size);
+        Gizmos.DrawWireCube(transform.position, Vector3.one * size);
 
         for (int i = 0; i < gridPoints.Length; i++)
         {

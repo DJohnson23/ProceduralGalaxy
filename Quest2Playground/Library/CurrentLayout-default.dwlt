@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 542}
   m_MaxSize: {x: 10000, y: 10000}
@@ -46,7 +46,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
-  m_MinSize: {x: 875, y: 542}
+  m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
   m_TopViewHeight: 30
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_MinSize: {x: 781, y: 492}
   m_MaxSize: {x: 18004, y: 14042}
   vertical: 0
-  controlID: 199
+  controlID: 204
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 505, y: 492}
   m_MaxSize: {x: 14003, y: 14042}
   vertical: 1
-  controlID: 109
+  controlID: 88
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_MinSize: {x: 505, y: 221}
   m_MaxSize: {x: 12005, y: 4021}
   vertical: 0
-  controlID: 63
+  controlID: 89
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -219,8 +219,8 @@ MonoBehaviour:
     y: 0
     width: 555
     height: 628
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_MinSize: {x: 333, y: 271}
   m_MaxSize: {x: 14003, y: 10021}
   vertical: 0
-  controlID: 110
+  controlID: 163
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -475,9 +475,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 30fbffff
+      m_SelectedIDs: 62870000
+      m_LastClickedID: 34658
+      m_ExpandedIDs: dc50f2ffdcc6f2ff86f9ffff30fbffffee77000080870000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -537,9 +537,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 205.24844, y: -133.51227, z: 149.61554}
+    m_Target: {x: 178.68198, y: 446.13696, z: -164.52573}
     speed: 2
-    m_Value: {x: 205.24844, y: -133.51227, z: 149.61554}
+    m_Value: {x: 178.68198, y: 446.13696, z: -164.52573}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -586,13 +586,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.00047762739, y: -0.8067821, z: 0.591115, w: 0.0011149953}
+    m_Target: {x: 0.12724335, y: 0.27672192, z: -0.03682201, w: 0.9520025}
     speed: 2
-    m_Value: {x: 0.000477552, y: -0.8066548, z: 0.5910217, w: 0.0011148194}
+    m_Value: {x: 0.12716061, y: 0.27808973, z: -0.037004866, w: 0.95138156}
   m_Size:
-    m_Target: 431.60214
+    m_Target: 1662.2775
     speed: 2
-    m_Value: 431.60214
+    m_Value: 1590.6962
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -655,21 +655,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Compute/Includes
+    - Assets/Scripts/Player
     m_Globs: []
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/Compute/Includes
+  - Assets/Scripts/Player
   m_LastFoldersGridSize: 16
-  m_LastProjectPath: C:\Users\gsocc\OneDrive\Documents\Unity Projects\Quest2Playground
+  m_LastProjectPath: C:\Users\gsocc\OneDrive\Desktop\Github\ProceduralGalaxy\Quest2Playground
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 142}
-    m_SelectedIDs: 3a7f0000
-    m_LastClickedID: 32570
-    m_ExpandedIDs: 00000000f2750000f4750000f6750000f8750000a0770000307f000000ca9a3b
+    scrollPos: {x: 0, y: 126}
+    m_SelectedIDs: 94880000
+    m_LastClickedID: 34964
+    m_ExpandedIDs: 00000000f2750000f4750000f6750000a077000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

@@ -1,13 +1,8 @@
 Base path: 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data/PlaybackEngines'
 Cmd: initializeCompiler
 Cmd: compileComputeKernel
-  error: 1 plat 4 at MarchingCubesShader.compute(62): signed/unsigned mismatch, unsigned assumed
-  error: 1 plat 4 at MarchingCubesShader.compute(414): 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
-  api=4 insize=23110 outsize=73858 ok=1
+  api=9 insize=1491 outsize=11000 ok=1
 Cmd: compileComputeKernel
-  error: 1 plat 4 at MarchingCubesShader.compute(63): signed/unsigned mismatch, unsigned assumed
-  error: 1 plat 4 at MarchingCubesShader.compute(415): 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
-  api=4 insize=23274 outsize=73993 ok=1
-Cmd: compileComputeKernel
-  error: 1 plat 9 at MarchingCubesShader.compute(413): 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
-  api=9 insize=23309 outsize=306414 ok=1
+  error: 1 plat 4 at PlanetChunkInitShader.compute(39): implicit truncation of vector type
+  error: 2 plat 4 at PlanetChunkInitShader.compute(42): syntax error: unexpected token ')'
+  api=4 insize=1664 outsize=0 ok=0

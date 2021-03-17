@@ -1,9 +1,18 @@
 Base path: 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data/PlaybackEngines'
 Cmd: initializeCompiler
 Cmd: compileComputeKernel
-  error: 2 plat 9 at ../Includes/FractalNoise.cginc(8): syntax error: unexpected token '+='
-  error: 2 plat 9 at ../Includes/FractalNoise.cginc(48): undeclared identifier 'persistence'
-  api=9 insize=1015 outsize=0 ok=0
+  api=4 insize=1225 outsize=1088 ok=1
 Cmd: compileComputeKernel
-  error: 2 plat 9 at ../Includes/FractalNoise.cginc(8): syntax error: unexpected token '+='
-  api=9 insize=1017 outsize=0 ok=0
+  api=4 insize=1491 outsize=5051 ok=1
+Cmd: compileComputeKernel
+  error: 1 plat 4 at PlanetChunkInitShader.compute(39): implicit truncation of vector type
+  api=4 insize=1664 outsize=5270 ok=1
+Cmd: compileComputeKernel
+  error: 1 plat 4 at PlanetChunkInitShader.compute(39): implicit truncation of vector type
+  api=4 insize=1650 outsize=5006 ok=1
+Cmd: compileComputeKernel
+  error: 1 plat 9 at PlanetChunkInitShader.compute(39): implicit truncation of vector type
+  api=9 insize=1670 outsize=10356 ok=1
+Cmd: compileComputeKernel
+  error: 1 plat 9 at PlanetChunkInitShader.compute(39): implicit truncation of vector type
+  api=9 insize=1671 outsize=2455 ok=1

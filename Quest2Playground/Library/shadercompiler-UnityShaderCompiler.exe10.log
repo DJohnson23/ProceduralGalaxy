@@ -1,5 +1,11 @@
 Base path: 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data/PlaybackEngines'
 Cmd: initializeCompiler
 Cmd: compileComputeKernel
-  error: 1 plat 9 at MarchingCubesShader.compute(414): 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
-  api=9 insize=23402 outsize=306419 ok=1
+  error: 1 plat 9 at PlanetChunkInitShader.compute(39): implicit truncation of vector type
+  error: 2 plat 9 at PlanetChunkInitShader.compute(42): syntax error: unexpected token ';'
+  error: 2 plat 9 at PlanetChunkInitShader.compute(48): syntax error: unexpected token ']'
+  error: 2 plat 9 at PlanetChunkInitShader.compute(57): undeclared identifier 'id'
+  api=9 insize=1663 outsize=0 ok=0
+Cmd: compileComputeKernel
+  error: 1 plat 9 at PlanetChunkInitShader.compute(39): implicit truncation of vector type
+  api=9 insize=1650 outsize=10271 ok=1
