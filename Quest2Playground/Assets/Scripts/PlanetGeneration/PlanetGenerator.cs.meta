@@ -3,7 +3,11 @@ guid: 6c954f173a2ddac4bb2faf957e9ebb12
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - viewer: {instanceID: 0}
+  - marchingCubesShader: {fileID: 7200000, guid: e34cb509cb1c0444e99bea8eb8b6fc0f, type: 3}
+  - planetChunkInitShader: {fileID: 7200000, guid: cc28ca9e33d707c48a0b995abcfb04d3, type: 3}
+  - planetMaterial: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

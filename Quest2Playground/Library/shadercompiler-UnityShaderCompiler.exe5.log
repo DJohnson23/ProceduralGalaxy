@@ -1,4 +1,8 @@
 Base path: 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2020.1.14f1/Editor/Data/PlaybackEngines'
 Cmd: initializeCompiler
 Cmd: compileComputeKernel
-  api=4 insize=1437 outsize=5053 ok=1
+  error: 1 plat 4 at PlanetChunkInitShader.compute(43): implicit truncation of vector type
+  api=4 insize=1796 outsize=1325 ok=1
+Unhandled exception: Protocol error - unexpected end of data (did the Editor crash?)
+
+Quitting shader compiler process

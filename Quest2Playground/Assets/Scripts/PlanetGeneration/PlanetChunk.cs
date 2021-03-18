@@ -36,6 +36,8 @@ public class PlanetChunk : MonoBehaviour
     public float surfaceHeight = 15f;
     public float coreRadius = 50f;
 
+    public System.Action initCallback;
+
     public int LOD
     {
         get
@@ -70,10 +72,11 @@ public class PlanetChunk : MonoBehaviour
     int pointsPerRow;
     int numCells;
 
-    bool initialized = false;
+    public bool initialized { get; private set; } = false;
     Vector3 worldPosition;
 
     float timeStart;
+    Dictionary<int, Mesh> lodMeshes;
 
     private void Start()
     {
@@ -90,6 +93,7 @@ public class PlanetChunk : MonoBehaviour
         worldPosition = transform.position;
         meshFilter = GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
+        lodMeshes = new Dictionary<int, Mesh>();
         InitPoints();
     }
 
@@ -132,18 +136,24 @@ public class PlanetChunk : MonoBehaviour
 
     private void ReceiveInitData(AsyncGPUReadbackRequest request)
     {
-        float initTime = Time.time - timeStart;
-        Debug.Log("Init: " + initTime);
+        //float initTime = Time.time - timeStart;
+        //Debug.Log("Init: " + initTime);
         gridPoints = request.GetData<GridPoint>(0).ToArray();
         //initGridPointBuffer.GetData(gridPoints);
         initGridPointBuffer.Release();
         initialized = true;
 
-        float genStart = Time.time;
-        GenerateMesh();
-        float genTime = Time.time - genStart;
+        if(initCallback != null)
+        {
+            initCallback();
+        }
 
-        Debug.Log("Generate Mesh: " + genTime);
+        //float genStart = Time.time;
+
+        GenerateMesh();
+
+        //float genTime = Time.time - genStart;
+        //Debug.Log("Generate Mesh: " + genTime);
     }
 
     private void GenerateMesh()
@@ -158,6 +168,17 @@ public class PlanetChunk : MonoBehaviour
         if(marchingCubeShader == null)
         {
             Debug.LogError("No Compute Shader Set for Planet Chunk");
+            return;
+        }
+
+        if(meshFilter == null)
+        {
+            return;
+        }
+
+        if(lodMeshes.ContainsKey(lod))
+        {
+            SetMesh(lodMeshes[lod]);
             return;
         }
 
@@ -188,9 +209,16 @@ public class PlanetChunk : MonoBehaviour
         Triangle[] newTriangles = new Triangle[args[0]];
         triangleBuffer.GetData(newTriangles);
 
+        /*
+        Vector3[] vertices = new Vector3[0];
+        int[] triangles = new int[0];
+        CreateUniqueVertexArray(ref newTriangles, ref vertices, ref triangles);
+        */
+        
         Vector3[] vertices = new Vector3[newTriangles.Length * 3];
         int[] triangles = new int[newTriangles.Length * 3];
 
+        
         for (int i = 0; i < newTriangles.Length; i++)
         {
             Triangle triangle = newTriangles[i];
@@ -202,19 +230,118 @@ public class PlanetChunk : MonoBehaviour
             triangles[i * 3 + 1] = i * 3 + 1;
             triangles[i * 3 + 2] = i * 3 + 2;
         }
+        
 
         Mesh mesh = new Mesh();
 
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+        SetMesh(mesh);
 
+        lodMeshes.Add(lod, mesh);
+
+        ReleaseBuffers();
+    }
+
+    void SetMesh(Mesh mesh)
+    {
         meshFilter.mesh = mesh;
 
         meshCollider.sharedMesh = mesh;
         meshCollider.convex = false;
+    }
 
-        ReleaseBuffers();
+    void CreateUniqueVertexArray(ref Triangle[] newTriangles, ref Vector3[] vertices, ref int[] triangles)
+    {
+        List<Vector3> sortedSet = new List<Vector3>();
+
+        for(int i = 0; i < newTriangles.Length; i++)
+        {
+            AddUniqueSorted(ref newTriangles[i].A, ref sortedSet);
+            AddUniqueSorted(ref newTriangles[i].B, ref sortedSet);
+            AddUniqueSorted(ref newTriangles[i].C, ref sortedSet);
+        }
+
+        vertices = sortedSet.ToArray();
+        triangles = new int[newTriangles.Length * 3];
+
+        for(int i = 0; i < newTriangles.Length; i++)
+        {
+            Triangle curTri = newTriangles[i];
+            triangles[i * 3] = binarySearch(ref curTri.A, ref vertices);
+            triangles[i * 3 + 1] = binarySearch(ref curTri.B, ref vertices);
+            triangles[i * 3 + 2] = binarySearch(ref curTri.C, ref vertices);
+        }
+    }
+
+    void AddUniqueSorted(ref Vector3 newPoint, ref List<Vector3> points)
+    {
+        int l = 0;
+        int r = points.Count - 1;
+        int insertPoint = 0;
+
+        while (r >= l)
+        {
+            int mid = l + (r - l) / 2;
+
+            int compareVal = CompareVectors(points[mid], newPoint);
+
+            if (compareVal == 0)
+            {
+                return;
+            }
+            else if (compareVal > 0)
+            {
+                r = mid - 1;
+                insertPoint = mid;
+            }
+            else
+            {
+                l = mid + 1;
+                insertPoint = l;
+            }
+        }
+
+        points.Insert(insertPoint, newPoint);
+    }
+
+    int binarySearch(ref Vector3 searchPoint, ref Vector3[] points)
+    {
+        int l = 0;
+        int r = points.Length - 1;
+        while(r >= l)
+        {
+            int mid = l + (r - l) / 2;
+            int compareVal = CompareVectors(points[mid], searchPoint);
+
+            if (compareVal == 0)
+            {
+                return mid;
+            }
+            else if(compareVal > 0)
+            {
+                r = mid - 1;
+            }
+            else
+            {
+                l = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    public int CompareVectors(Vector3 a, Vector3 b)
+    {
+        if (a == b)
+        {
+            return 0;
+        }
+
+        return a.x != b.x ? (a.x > b.x ? 1 : -1)
+            : a.y != b.y ? (a.y > b.y ? 1 : -1)
+            : a.z > b.z ? 1 : -1;
     }
 
     float CalcPointValue(Vector3 point)

@@ -174,7 +174,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 100000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -329,7 +329,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877219177}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -4150}
+  m_LocalPosition: {x: 0, y: 0, z: -5518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 698501254}
@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185346889b7e84741b94a750e3c88edb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 100
   planet: {fileID: 1539644697}
 --- !u!1 &912787144
 GameObject:
@@ -487,10 +487,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c954f173a2ddac4bb2faf957e9ebb12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxViewDst: 150
-  depth: 9
+  depth: 7
   size: 10000
-  viewer: {fileID: 877219181}
+  viewer: {fileID: 698501254}
   noiseSettings:
     scale: 1
     numLayers: 6
@@ -498,21 +497,28 @@ MonoBehaviour:
     lacunarity: 1.9
     persistence: 0.7
   coreRadius: 4000
-  surfaceHeight: 100
+  surfaceHeight: 500
   chunkResolution: 4
   marchingCubesShader: {fileID: 7200000, guid: e34cb509cb1c0444e99bea8eb8b6fc0f, type: 3}
   planetChunkInitShader: {fileID: 7200000, guid: cc28ca9e33d707c48a0b995abcfb04d3, type: 3}
   planetMaterial: {fileID: 2100000, guid: f5436ce928163b64cb5ba598fa7a4121, type: 2}
   mass: 100
-  largeViewResolution: 5
+  largeViewResolution: 4
   largeViewDepth: 1
+  maxDistanceCheck: 5300
+  maxNonVisibleChunks: 10
   lodDistances:
   - lod: 0
-    distance: 100
+    distance: 600
   - lod: 1
-    distance: 120
+    distance: 675
   - lod: 2
-    distance: 150
+    distance: 750
+  viewDistances:
+  - maxViewDistance: 400
+    distanceFromCenter: 4250
+  - maxViewDistance: 1000
+    distanceFromCenter: 4500
 --- !u!4 &1539644698
 Transform:
   m_ObjectHideFlags: 0

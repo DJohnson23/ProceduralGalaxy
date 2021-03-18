@@ -24,8 +24,8 @@ public class ViewerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float depth = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float depth = Input.GetAxisRaw("Vertical");
 
         float vertical = 0;
 

@@ -28,6 +28,10 @@ int to1D(int x, int y, int z) {
     return (z * pointsPerRow * pointsPerRow) + (y * pointsPerRow) + x;
 }
 
+float lerp(float a, float b, float t) {
+    return (b - a) * t + a;
+}
+
 float CalcPointValue(float3 position) {
     float dist = distance(localPlanetCenter, position);
 
@@ -39,7 +43,7 @@ float CalcPointValue(float3 position) {
     float samplePosition = normalize(position) * coreRadius + localPlanetCenter;
 
     if (dist <= surfaceRadius) {
-        return 0;
+        return lerp(1, 0, (dist - coreRadius) / surfaceHeight);
         //return simpleNoise(samplePosition, numLayers, scale, persistence, lacunarity, multiplier) * (1 - (dist / surfaceRadius));
     }
 
